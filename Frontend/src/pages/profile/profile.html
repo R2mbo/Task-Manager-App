@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Hello" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasker - Profile</title>
+    <link rel="stylesheet" href="../../css/tailwind.css" />
+  </head>
+
+  <body>
+    <main class="min-h-screen flex items-center justify-center">
+      <div class="sm:w-[500px] w-[80%]">
+        <h1
+          class="sm:text-5xl mb-5 text-4xl font-bold text-center cursor-default"
+        >
+          
+        </h1>
+        <form method="post" class="sm:w-[400px] p-4 m-auto">
+          <div class="flex flex-col">
+            <label class="font-medium text-[1.1rem] my-1" for="username"
+              >Username</label
+            >
+            <input
+              class="focus:outline-none border border-black rounded-md px-2 py-1 disabled:text-gray-500"
+              type="text"
+              id="username"
+            />
+          </div>
+          <div class="flex flex-col">
+            <label class="font-medium text-[1.1rem] my-1" for="email"
+              >Email</label
+            >
+            <input
+              class="focus:outline-none border border-black rounded-md px-2 py-1 disabled:text-gray-500"
+              type="text"
+              id="email"
+            />
+          </div>
+          <input
+            class="bg-black text-white text-sm mt-2 cursor-pointer font-semibold px-5 py-2 rounded-lg"
+            type="button"
+            id="editInfo"
+            value="Edit Info"
+          />
+          <div id="password-section" class="flex flex-col">
+            <label class="font-medium text-[1.1rem] my-1" for="password"
+              >Password</label
+            >
+            <input
+              class="focus:outline-none border border-black rounded-md px-2 py-1 disabled:text-gray-500"
+              value="***************"
+              type="password"
+              id="password"
+            />
+            <a
+              href="../edit password/editpassword.html"
+              class="bg-black w-fit text-white text-sm mt-4 cursor-pointer font-semibold px-5 py-2 rounded-lg"
+              type="button"
+              >Edit Password</a
+            >
+          </div>
+        </form>
+      </div>
+    </main>
+    <script src="./profile.js"></script>
+  </body>
+</html>

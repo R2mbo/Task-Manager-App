@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/tailwind.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../fontAwesome/all.min.css" />
+    <title>Tasker</title>
+  </head>
+
+  <body class="bg-gray-100">
+    <header class="bg-white">
+      <div
+        class="mx-auto py-5 sm:px-0 px-2 sm:container flex flex-wrap items-center justify-between"
+      >
+        <div class="flex gap-x-3">
+          <i
+            id="burger"
+            class="fa-solid fa-bars text-2xl px-3 py-2 rounded-3xl cursor-pointer hover:bg-gray-200 active:bg-gray-300"
+          ></i>
+          <a class="text-3xl mr-1 font-bold" href="./tasker.html">Tasker</a>
+        </div>
+        <nav class="relative">
+          <ul>
+            <li
+              type="button"
+              id="userBtn"
+              class="font-semibold selection:bg-none text-lg pt-2 cursor-pointer"
+            ></li>
+          </ul>
+          <ul
+            class="drop-down absolute hidden border top-[50px] bg-white font-semibold w-32 border-black"
+          >
+            <li>
+              <a
+                class="p-2 block border-b border-black"
+                href="../profile/profile.html"
+                >Profile</a
+              >
+            </li>
+            <li>
+              <a id="log-out" class="p-2 block cursor-pointer">Log out</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <aside
+      class="sm:w-[300px] absolute z-10 top-[80px] -translate-x-[50rem] transition-all w-full min-h-[calc(100vh-80px)] bg-white"
+    >
+      <ul class="text-lg">
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#all_tasks"
+            >All Tasks</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#education"
+            >Education</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#work"
+            >Work</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#entertainment"
+            >Entertainment</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#travel"
+            >Travel</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#house"
+            >House</a
+          >
+        </li>
+        <li>
+          <a
+            class="p-5 block border-gray-200 border-b-2 cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-all font-medium"
+            href="#others"
+            >Others</a
+          >
+        </li>
+      </ul>
+    </aside>
+    <main class="sm:container sm:px-0 relative px-2 mx-auto">
+      <button
+        id="create-task"
+        class="flex items-center justify-center font-semibold text-md sm:w-[165px] py-2 mt-10 sm:px-0 w-full bg-black text-white rounded-md"
+      >
+        <span class="text-2xl pr-[5px] pb-[4px]">&plus;</span> Create New Task
+      </button>
+      <div id="create-card"
+        class="hidden bg-white shadow-lg sm:w-[600px] w-full absolute top-[50%] left-[50%] -translate-x-[50%]  h-[400px] rounded-2xl">
+        <button id="close-create-card" class="font-bold px-3 absolute right-[10px] top-[10px] text-2xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <form class="flex h-full flex-col p-2 items-center justify-center gap-2">
+          <h3 class="text-2xl font-semibold mb-5">Create New Task</h3>
+          <select class="p-2 sm:w-[80%] w-full border border-black rounded-lg " name="category" id="category">
+            <option value="Education">Education</option>
+            <option value="Work">Work</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Travel">Travel</option>
+            <option value="House">House</option>
+            <option value="Others">Others</option>
+          </select>
+          <input
+              class="focus:outline-none border sm:w-[80%] w-full border-black rounded-md px-2 py-1"
+              type="text"
+              id="task" placeholder="Your Task"
+            />
+            <button class="bg-black font-semibold text-white px-5 py-2 rounded-md sm:w-[80%] w-full" type="submit">Create Task</button>
+        </form>
+    </div>
+    </main>
+    <script src="./tasker.js"></script>
+    <script src="../../fontAwesome/all.min.js"></script>
+  </body>
+</html>
