@@ -12,13 +12,29 @@ burgerButton.addEventListener("click", function () {
 userButton.addEventListener("click", function () {
     dropdown.classList.toggle("hidden")
 })
-// Check for Visibilty in Drop Down List and aside List
+// Create New Task Button
+
+let createTaskButton = document.getElementById("create-task");
+let createTaskCard = document.getElementById("create-card")
+let closeCard = document.getElementById("close-create-card")
+createTaskButton.addEventListener("click", function () {
+    createTaskCard.classList.remove("hidden")
+})
+
+closeCard.addEventListener("click", function () {
+    createTaskCard.classList.add("hidden")
+})
+
+// Check for Visibilty in Drop Down List and aside List and the create task card
 document.addEventListener("click", function (e) {
     if (!e.target.matches("#userBtn") && !dropdown.classList.contains("hidden")) {
         dropdown.classList.add("hidden")
     }
     if (!e.target.matches("#burger") && !e.target.matches("aside") && !asideList.classList.contains("-translate-x-80")) {
         asideList.classList.add("-translate-x-[50rem]")
+    }
+    if (!e.target.closest("#create-card") && !e.target.matches("#create-task") && !createTaskCard.classList.contains("hidden")) {
+        createTaskCard.classList.add("hidden")
     }
 })
 
@@ -64,15 +80,4 @@ logoutButton.addEventListener('click', function () {
         console.log(err)
     }
 })
-// Create New Task Button
 
-let createTaskButton = document.getElementById("create-task");
-let createTaskCard = document.getElementById("create-card")
-let closeCard = document.getElementById("close-create-card")
-createTaskButton.addEventListener("click", function () {
-    createTaskCard.classList.remove("hidden")
-})
-
-closeCard.addEventListener("click", function () {
-    createTaskCard.classList.add("hidden")
-})
