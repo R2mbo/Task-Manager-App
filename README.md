@@ -2,7 +2,7 @@
 
 ## Tools
 
-### FrontEnd
+### Frontend
 
 - HTML
 - CSS (TailwindCSS)
