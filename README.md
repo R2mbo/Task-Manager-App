@@ -10,5 +10,5 @@
 
 ### Backend
 
-- NodeJS (express)
-- MongoDB (mongoose)
+- NodeJS (ExpressJS)
+- MongoDB (Mongoose)
