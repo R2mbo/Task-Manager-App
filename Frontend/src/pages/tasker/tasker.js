@@ -249,7 +249,7 @@ for (let li of list) {
                     }
                 }).then(async (data) => {
 
-                    location.hash = `#${li.innerHTML}`
+                    location.hash = `#${li.innerHTML.toLowerCase()}`
                     h2.innerHTML = `${li.innerHTML}`;
                     let userData = await data.json();
                     let tasks = userData.data.docs;
