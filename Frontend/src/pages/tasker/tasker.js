@@ -51,7 +51,6 @@ window.addEventListener("load", function () {
             })
                 .then((obj) => obj.json())
                 .then((data) => {
-                    this.localStorage.setItem('id', `${data.data.currentUser._id}`)
                     userButton.innerHTML = `Welcome ${data.data.currentUser.username}`
                 })
         } catch (err) {
@@ -64,7 +63,6 @@ window.addEventListener("load", function () {
 
 //  LogOut
 logoutButton.addEventListener('click', function () {
-    let token = localStorage.getItem("token");
     try {
         fetch('https://task-manager-api-fgcs.onrender.com/api/v1/auth/logout', {
             method: "POST",
@@ -80,4 +78,245 @@ logoutButton.addEventListener('click', function () {
         console.log(err)
     }
 })
+
+
+// Show The Tasks for the category
+let section = document.createElement("section");
+let main = document.querySelector("main");
+let veryBigDiv = document.createElement("div");
+veryBigDiv.className = "space-y-5"
+section.classList.add("mt-5")
+let h2 = document.createElement("h2");
+h2.className = "text-3xl mx-auto sm:w-[600px] font-bold mb-6";
+let token = localStorage.getItem("token");
+let id = localStorage.getItem("id")
+
+let list = document.querySelectorAll("aside ul li a");
+try {
+    fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/users/${id}/tasks`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then(async (data) => {
+        location.hash = "#all_tasks"
+        h2.innerHTML = "All Tasks";
+        let userData = await data.json();
+        let tasks = userData.data.docs;
+        if (tasks.length === 0) {
+            section.innerHTML = "No Tasks Found.";
+            section.className = "text-center font-semibold mx-auto w-fit text-2xl mt-10";
+            main.append(section)
+        } else {
+            section.innerHTML = '';
+            section.className = '';
+            h2.innerHTML = '';
+            h2.className = '';
+            veryBigDiv.innerHTML = '';
+            for (let task of tasks) {
+                // the div after the very big div contains all the task items
+                let bigDiv = document.createElement("div");
+                bigDiv.className = "flex items-center mx-auto bg-white px-3 shadow-md sm:w-[600px] w-full";
+                // the div contains the span and label and input
+                let mediumDiv = document.createElement("div");
+                mediumDiv.className = "p-2 flex-grow";
+                // the name of the category
+                let spanInsideMediumDiv = document.createElement("span")
+                spanInsideMediumDiv.className = "cursor-default";
+                spanInsideMediumDiv.innerHTML = `${task.category}`;
+                // contains the input and label
+                let smallDiv = document.createElement("div");
+                smallDiv.className = "flex items-center";
+                // input checkbox
+                let checkBox = document.createElement("input");
+                checkBox.type = "checkbox";
+                checkBox.id = `${task.id}`;
+                checkBox.className = "h-[2rem] w-[2rem] accent-black";
+                // label for the task
+                let taskText = document.createElement("label");
+                taskText.setAttribute("for", `${task.id}`);
+                taskText.className = "ml-2 py-3 w-full font-semibold text-xl"
+                taskText.innerHTML = `${task.description}`;
+                // Delete Button
+                let deleteButton = document.createElement("i")
+                deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
+                deleteButton.id = `${task.id}-delete`;
+                // Edit Button
+                let editButton = document.createElement("i");
+                editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
+                editButton.id = `${task.id}-edit`
+                section.prepend(h2);
+                section.append(veryBigDiv);
+                veryBigDiv.append(bigDiv)
+                bigDiv.append(mediumDiv)
+                mediumDiv.append(spanInsideMediumDiv);
+                mediumDiv.append(smallDiv)
+                smallDiv.append(checkBox)
+                smallDiv.append(taskText)
+                bigDiv.append(deleteButton)
+                bigDiv.append(editButton)
+                main.append(section)
+            }
+        }
+    })
+}
+catch (err) {
+    console.log(err)
+}
+
+for (let li of list) {
+    li.addEventListener("click", function (e) {
+        if (e.target.innerHTML === "All Tasks") {
+            try {
+                fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/users/${id}/tasks`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(async (data) => {
+                    location.hash = "#all_tasks"
+                    h2.innerHTML = "All Tasks";
+                    let userData = await data.json();
+                    let tasks = userData.data.docs;
+
+                    if (tasks.length === 0) {
+                        section.innerHTML = "No Tasks Found.";
+                        section.className = "text-center font-semibold mx-auto w-fit text-2xl mt-10";
+                        main.append(section)
+
+                    } else {
+                        section.innerHTML = '';
+                        section.className = '';
+                        h2.innerHTML = '';
+                        h2.className = '';
+                        veryBigDiv.innerHTML = '';
+                        for (let task of tasks) {
+                            // the div after the very big div contains all the task items
+                            let bigDiv = document.createElement("div");
+                            bigDiv.className = "flex items-center mx-auto bg-white px-3 shadow-md sm:w-[600px] w-full";
+                            // the div contains the span and label and input
+                            let mediumDiv = document.createElement("div");
+                            mediumDiv.className = "p-2 flex-grow";
+                            // the name of the category
+                            let spanInsideMediumDiv = document.createElement("span")
+                            spanInsideMediumDiv.className = "cursor-default";
+                            spanInsideMediumDiv.innerHTML = `${task.category}`;
+                            // contains the input and label
+                            let smallDiv = document.createElement("div");
+                            smallDiv.className = "flex items-center";
+                            // input checkbox
+                            let checkBox = document.createElement("input");
+                            checkBox.type = "checkbox";
+                            checkBox.id = `${task.id}`;
+                            checkBox.className = "h-[2rem] w-[2rem] accent-black";
+                            // label for the task
+                            let taskText = document.createElement("label");
+                            taskText.setAttribute("for", `${task.id}`);
+                            taskText.className = "ml-2 py-3 w-full font-semibold text-xl"
+                            taskText.innerHTML = `${task.description}`;
+                            // Delete Button
+                            let deleteButton = document.createElement("i")
+                            deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
+                            deleteButton.id = `${task.id}-delete`;
+                            // Edit Button
+                            let editButton = document.createElement("i");
+                            editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
+                            editButton.id = `${task.id}-edit`
+                            section.prepend(h2);
+                            section.append(veryBigDiv);
+                            veryBigDiv.append(bigDiv)
+                            bigDiv.append(mediumDiv)
+                            mediumDiv.append(spanInsideMediumDiv);
+                            mediumDiv.append(smallDiv)
+                            smallDiv.append(checkBox)
+                            smallDiv.append(taskText)
+                            bigDiv.append(deleteButton)
+                            bigDiv.append(editButton)
+                            main.append(section)
+                        }
+                    }
+                })
+            }
+            catch (err) {
+                console.log(err)
+            }
+        } else {
+            try {
+                fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/users/${id}/tasks?category=${li.innerHTML}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(async (data) => {
+
+                    location.hash = `#${li.innerHTML}`
+                    h2.innerHTML = `${li.innerHTML}`;
+                    let userData = await data.json();
+                    let tasks = userData.data.docs;
+
+                    if (tasks.length === 0) {
+                        section.innerHTML = "No Tasks Found.";
+                        section.className = "text-center font-semibold mx-auto w-fit text-2xl mt-10";
+                        main.append(section)
+
+                    } else {
+                        section.innerHTML = '';
+                        section.className = '';
+                        h2.innerHTML = '';
+                        h2.className = '';
+                        veryBigDiv.innerHTML = '';
+                        for (let task of tasks) {
+                            // the div after the very big div contains all the task items
+                            let bigDiv = document.createElement("div");
+                            bigDiv.className = "flex items-center mx-auto bg-white px-3 shadow-md sm:w-[600px] w-full";
+                            // the div contains the span and label and input
+                            let mediumDiv = document.createElement("div");
+                            mediumDiv.className = "p-2 flex-grow";
+                            // the name of the category
+                            let spanInsideMediumDiv = document.createElement("span")
+                            spanInsideMediumDiv.className = "cursor-default";
+                            spanInsideMediumDiv.innerHTML = `${task.category}`;
+                            // contains the input and label
+                            let smallDiv = document.createElement("div");
+                            smallDiv.className = "flex items-center";
+                            // input checkbox
+                            let checkBox = document.createElement("input");
+                            checkBox.type = "checkbox";
+                            checkBox.id = `${task.id}`;
+                            checkBox.className = "h-[2rem] w-[2rem] accent-black";
+                            // label for the task
+                            let taskText = document.createElement("label");
+                            taskText.setAttribute("for", `${task.id}`);
+                            taskText.className = "ml-2 py-3 w-full font-semibold text-xl"
+                            taskText.innerHTML = `${task.description}`;
+                            // Delete Button
+                            let deleteButton = document.createElement("i")
+                            deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
+                            deleteButton.id = `${task.id}-delete`;
+                            // Edit Button
+                            let editButton = document.createElement("i");
+                            editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
+                            editButton.id = `${task.id}-edit`
+                            section.prepend(h2);
+                            section.append(veryBigDiv);
+                            veryBigDiv.append(bigDiv)
+                            bigDiv.append(mediumDiv)
+                            mediumDiv.append(spanInsideMediumDiv);
+                            mediumDiv.append(smallDiv)
+                            smallDiv.append(checkBox)
+                            smallDiv.append(taskText)
+                            bigDiv.append(deleteButton)
+                            bigDiv.append(editButton)
+                            main.append(section)
+                        }
+                    }
+                })
+            }
+            catch (err) {
+                console.log(err)
+            }
+        }
+    })
+}
+
 
