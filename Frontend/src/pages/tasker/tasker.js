@@ -285,14 +285,21 @@ for (let li of list) {
                             taskText.setAttribute("for", `${task.id}`);
                             taskText.className = "ml-2 py-3 w-full font-semibold text-[1rem] sm:text-xl"
                             taskText.innerHTML = `${task.description}`;
+                            if (task.isDone) {
+                                checkBox.setAttribute("checked", "");
+                                taskText.classList.add("line-through");
+                            } else {
+                                checkBox.removeAttribute("checked")
+                                taskText.classList.remove("line-through");
+                            }
                             // Delete Button
                             let deleteButton = document.createElement("i")
                             deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
-                            deleteButton.id = `${task.id}-delete`;
+                            deleteButton.id = `${task.id}`;
                             // Edit Button
                             let editButton = document.createElement("i");
                             editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
-                            editButton.id = `${task.id}-edit`
+                            editButton.id = `${task.id}`
                             section.prepend(h2);
                             section.append(veryBigDiv);
                             veryBigDiv.append(bigDiv)
@@ -332,6 +339,29 @@ for (let li of list) {
                                     checkBox.labels[0].classList.remove("line-through")
                                     checkBox.removeAttribute("checked")
                                 }
+                            })
+                            editButton.addEventListener("click", function () {
+                                editCard.classList.remove("hidden")
+                                taskEdit.value = taskText.innerText;
+                                editSelect.value = spanInsideMediumDiv.innerHTML
+                                editForm.addEventListener("submit", function (e) {
+                                    e.preventDefault();
+                                    fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/${checkBox.id}`, {
+                                        method: "PATCH",
+                                        body: JSON.stringify({
+                                            description: taskEdit.value,
+                                            category: editSelect.value
+                                        }),
+                                        headers: {
+                                            Authorization: `Bearer ${token}`,
+                                            "Content-type": "application/json",
+                                        }
+                                    }).then(() => location.reload())
+                                    editCard.classList.add("hidden")
+                                })
+                                closeEditCard.addEventListener("click", function () {
+                                    editCard.classList.add("hidden")
+                                })
                             })
                         }
                     }
@@ -392,14 +422,21 @@ for (let li of list) {
                             taskText.setAttribute("for", `${task.id}`);
                             taskText.className = "ml-2 py-3 w-full font-semibold text-[1rem] sm:text-xl"
                             taskText.innerHTML = `${task.description}`;
+                            if (task.isDone) {
+                                checkBox.setAttribute("checked", "");
+                                taskText.classList.add("line-through");
+                            } else {
+                                checkBox.removeAttribute("checked")
+                                taskText.classList.remove("line-through");
+                            }
                             // Delete Button
                             let deleteButton = document.createElement("i")
                             deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
-                            deleteButton.id = `${task.id}-delete`;
+                            deleteButton.id = `${task.id}`;
                             // Edit Button
                             let editButton = document.createElement("i");
                             editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
-                            editButton.id = `${task.id}-edit`
+                            editButton.id = `${task.id}`
                             section.prepend(h2);
                             section.append(veryBigDiv);
                             veryBigDiv.append(bigDiv)
@@ -439,6 +476,29 @@ for (let li of list) {
                                     checkBox.labels[0].classList.remove("line-through")
                                     checkBox.removeAttribute("checked")
                                 }
+                            })
+                            editButton.addEventListener("click", function () {
+                                editCard.classList.remove("hidden")
+                                taskEdit.value = taskText.innerText;
+                                editSelect.value = spanInsideMediumDiv.innerHTML
+                                editForm.addEventListener("submit", function (e) {
+                                    e.preventDefault();
+                                    fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/${checkBox.id}`, {
+                                        method: "PATCH",
+                                        body: JSON.stringify({
+                                            description: taskEdit.value,
+                                            category: editSelect.value
+                                        }),
+                                        headers: {
+                                            Authorization: `Bearer ${token}`,
+                                            "Content-type": "application/json",
+                                        }
+                                    }).then(() => location.reload())
+                                    editCard.classList.add("hidden")
+                                })
+                                closeEditCard.addEventListener("click", function () {
+                                    editCard.classList.add("hidden")
+                                })
                             })
                         }
                     }
