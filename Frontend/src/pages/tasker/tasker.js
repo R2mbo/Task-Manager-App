@@ -46,28 +46,7 @@ document.addEventListener("click", function (e) {
     }
 })
 
-// Dynamic Welcome Text
-window.addEventListener("load", function () {
-    if (localStorage.getItem("token")) {
-        let token = this.localStorage.getItem("token");
-        try {
-            fetch("https://task-manager-api-fgcs.onrender.com/api/v1/users/me", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-                .then((obj) => obj.json())
-                .then((data) => {
-                    userButton.innerHTML = `Welcome ${data.data.currentUser.username}`
-                })
-        } catch (err) {
-            console.log(err)
-        }
-    } else {
-        this.location.href = '../../../index.html'
-    }
-})
+
 
 //  LogOut
 logoutButton.addEventListener('click', function () {
@@ -99,139 +78,161 @@ let token = localStorage.getItem("token");
 let id = localStorage.getItem("id")
 
 let list = document.querySelectorAll("aside ul li a");
-try {
-    fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/users/${id}/tasks`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }).then(async (data) => {
-        location.hash = "#all_tasks"
-        let userData = await data.json();
-        let tasks = userData.data.docs;
-        if (tasks.length === 0) {
-            section.innerHTML = "No Tasks Found.";
-            section.className = "text-center font-semibold mx-auto w-fit text-2xl mt-10";
-            main.append(section)
-        } else {
-            section.innerHTML = '';
-            section.className = '';
-            h2.innerHTML = '';
-            h2.className = '';
-            veryBigDiv.innerHTML = '';
-            h2.innerHTML = "All Tasks";
-            h2.className = "text-3xl mx-auto sm:w-[600px] font-bold mb-6";
-            for (let task of tasks) {
-                // the div after the very big div contains all the task items
-                let bigDiv = document.createElement("div");
-                bigDiv.className = "flex items-center mx-auto bg-white px-3 shadow-md sm:w-[600px] w-full";
-                // the div contains the span and label and input
-                let mediumDiv = document.createElement("div");
-                mediumDiv.className = "p-2 flex-grow";
-                // the name of the category
-                let spanInsideMediumDiv = document.createElement("span")
-                spanInsideMediumDiv.className = "cursor-default";
-                spanInsideMediumDiv.innerHTML = `${task.category}`;
-                // contains the input and label
-                let smallDiv = document.createElement("div");
-                smallDiv.className = "flex items-center";
-                // input checkbox
-                let checkBox = document.createElement("input");
-                checkBox.type = "checkbox";
-                checkBox.id = `${task.id}`;
-                checkBox.className = "h-[2rem] w-[2rem] accent-black";
-                // label for the task
-                let taskText = document.createElement("label");
-                taskText.setAttribute("for", `${task.id}`);
-                taskText.className = "ml-2 py-3 w-full font-semibold text-[1rem] sm:text-xl"
-                taskText.innerHTML = `${task.description}`;
-                if (task.isDone) {
-                    checkBox.setAttribute("checked", "");
-                    taskText.classList.add("line-through");
-                } else {
-                    checkBox.removeAttribute("checked")
-                    taskText.classList.remove("line-through");
+// Dynamic Data Load
+window.addEventListener("load", function () {
+    if (localStorage.getItem("token")) {
+        let token = this.localStorage.getItem("token");
+        try {
+            fetch("https://task-manager-api-fgcs.onrender.com/api/v1/users/me", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
                 }
-                // Delete Button
-                let deleteButton = document.createElement("i")
-                deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
-                deleteButton.id = `${task.id}`;
-                // Edit Button
-                let editButton = document.createElement("i");
-                editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
-                editButton.id = `${task.id}`
-                section.prepend(h2);
-                section.append(veryBigDiv);
-                veryBigDiv.append(bigDiv)
-                bigDiv.append(mediumDiv)
-                mediumDiv.append(spanInsideMediumDiv);
-                mediumDiv.append(smallDiv)
-                smallDiv.append(checkBox)
-                smallDiv.append(taskText)
-                bigDiv.append(deleteButton)
-                bigDiv.append(editButton)
-                main.append(section)
-                deleteButton.addEventListener("click", function () {
-                    fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/${deleteButton.id}`, {
-                        method: "DELETE",
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }).then(() => location.reload())
+            })
+                .then((obj) => obj.json())
+                .then((data) => {
+                    userButton.innerHTML = `Welcome ${data.data.currentUser.username}`
                 })
-
-                checkBox.addEventListener("click", function () {
-                    if (!checkBox.labels[0].classList.contains("line-through") && !checkBox.hasAttribute("checked")) {
-                        fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/toggle-done-task/${checkBox.id}`, {
-                            method: "PATCH",
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            }
-                        })
-                        checkBox.labels[0].classList.add("line-through")
-                        checkBox.setAttribute("checked", "")
-                    } else {
-                        fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/toggle-done-task/${checkBox.id}`, {
-                            method: "PATCH",
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            }
-                        })
-                        checkBox.labels[0].classList.remove("line-through")
-                        checkBox.removeAttribute("checked")
-                    }
-                })
-
-                editButton.addEventListener("click", function () {
-                    editCard.classList.remove("hidden")
-                    taskEdit.value = taskText.innerText;
-                    editSelect.value = spanInsideMediumDiv.innerHTML
-                    editForm.addEventListener("submit", function (e) {
-                        e.preventDefault();
-                        fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/${checkBox.id}`, {
-                            method: "PATCH",
-                            body: JSON.stringify({
-                                description: taskEdit.value,
-                                category: editSelect.value
-                            }),
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-type": "application/json",
-                            }
-                        }).then(() => location.reload())
-                        editCard.classList.add("hidden")
-                    })
-                    closeEditCard.addEventListener("click", function () {
-                        editCard.classList.add("hidden")
-                    })
-                })
-            }
+        } catch (err) {
+            console.log(err)
         }
-    })
-}
-catch (err) {
-    console.log(err)
-}
+        try {
+            fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/users/${id}/tasks`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(async (data) => {
+                location.hash = "#all_tasks"
+                let userData = await data.json();
+                let tasks = userData.data.docs;
+                if (tasks.length === 0) {
+                    section.innerHTML = "No Tasks Found.";
+                    section.className = "text-center font-semibold mx-auto w-fit text-2xl mt-10";
+                    main.append(section)
+                } else {
+                    section.innerHTML = '';
+                    section.className = '';
+                    h2.innerHTML = '';
+                    h2.className = '';
+                    veryBigDiv.innerHTML = '';
+                    h2.innerHTML = "All Tasks";
+                    h2.className = "text-3xl mx-auto sm:w-[600px] font-bold mb-6";
+                    for (let task of tasks) {
+                        // the div after the very big div contains all the task items
+                        let bigDiv = document.createElement("div");
+                        bigDiv.className = "flex items-center mx-auto bg-white px-3 shadow-md sm:w-[600px] w-full";
+                        // the div contains the span and label and input
+                        let mediumDiv = document.createElement("div");
+                        mediumDiv.className = "p-2 flex-grow";
+                        // the name of the category
+                        let spanInsideMediumDiv = document.createElement("span")
+                        spanInsideMediumDiv.className = "cursor-default";
+                        spanInsideMediumDiv.innerHTML = `${task.category}`;
+                        // contains the input and label
+                        let smallDiv = document.createElement("div");
+                        smallDiv.className = "flex items-center";
+                        // input checkbox
+                        let checkBox = document.createElement("input");
+                        checkBox.type = "checkbox";
+                        checkBox.id = `${task.id}`;
+                        checkBox.className = "h-[2rem] w-[2rem] accent-black";
+                        // label for the task
+                        let taskText = document.createElement("label");
+                        taskText.setAttribute("for", `${task.id}`);
+                        taskText.className = "ml-2 py-3 w-full font-semibold text-[1rem] sm:text-xl"
+                        taskText.innerHTML = `${task.description}`;
+                        if (task.isDone) {
+                            checkBox.setAttribute("checked", "");
+                            taskText.classList.add("line-through");
+                        } else {
+                            checkBox.removeAttribute("checked")
+                            taskText.classList.remove("line-through");
+                        }
+                        // Delete Button
+                        let deleteButton = document.createElement("i")
+                        deleteButton.className = "fas fa-times text-2xl cursor-pointer pt-[20px] ml-auto pt-4 text-gray-800 hover:text-black";
+                        deleteButton.id = `${task.id}`;
+                        // Edit Button
+                        let editButton = document.createElement("i");
+                        editButton.className = "fas fa-edit ml-5 pt-4 cursor-pointer text-gray-800 hover:text-black text-2xl";
+                        editButton.id = `${task.id}`
+                        section.prepend(h2);
+                        section.append(veryBigDiv);
+                        veryBigDiv.append(bigDiv)
+                        bigDiv.append(mediumDiv)
+                        mediumDiv.append(spanInsideMediumDiv);
+                        mediumDiv.append(smallDiv)
+                        smallDiv.append(checkBox)
+                        smallDiv.append(taskText)
+                        bigDiv.append(deleteButton)
+                        bigDiv.append(editButton)
+                        main.append(section)
+                        deleteButton.addEventListener("click", function () {
+                            fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/${deleteButton.id}`, {
+                                method: "DELETE",
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }).then(() => location.reload())
+                        })
+
+                        checkBox.addEventListener("click", function () {
+                            if (!checkBox.labels[0].classList.contains("line-through") && !checkBox.hasAttribute("checked")) {
+                                fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/toggle-done-task/${checkBox.id}`, {
+                                    method: "PATCH",
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                    }
+                                })
+                                checkBox.labels[0].classList.add("line-through")
+                                checkBox.setAttribute("checked", "")
+                            } else {
+                                fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/toggle-done-task/${checkBox.id}`, {
+                                    method: "PATCH",
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                    }
+                                })
+                                checkBox.labels[0].classList.remove("line-through")
+                                checkBox.removeAttribute("checked")
+                            }
+                        })
+
+                        editButton.addEventListener("click", function () {
+                            editCard.classList.remove("hidden")
+                            taskEdit.value = taskText.innerText;
+                            editSelect.value = spanInsideMediumDiv.innerHTML
+                            editForm.addEventListener("submit", function (e) {
+                                e.preventDefault();
+                                fetch(`https://task-manager-api-fgcs.onrender.com/api/v1/tasks/${checkBox.id}`, {
+                                    method: "PATCH",
+                                    body: JSON.stringify({
+                                        description: taskEdit.value,
+                                        category: editSelect.value
+                                    }),
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                        "Content-type": "application/json",
+                                    }
+                                }).then(() => location.reload())
+                                editCard.classList.add("hidden")
+                            })
+                            closeEditCard.addEventListener("click", function () {
+                                editCard.classList.add("hidden")
+                            })
+                        })
+                    }
+                }
+            })
+        }
+        catch (err) {
+            console.log(err)
+        }
+    } else {
+        this.location.href = '../../../index.html'
+    }
+})
 
 for (let li of list) {
     li.addEventListener("click", function (e) {

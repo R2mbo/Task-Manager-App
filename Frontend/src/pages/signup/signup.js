@@ -29,6 +29,7 @@ form.addEventListener('submit', function (e) {
         }).then(async (data) => await data.json())
             .then((data) => {
                 localStorage.setItem("token", `${data.data.token}`)
+                localStorage.setItem("id", `${data.data.user._id}`)
                 location.href = '../tasker/tasker.html'
             })
     } catch (err) {
