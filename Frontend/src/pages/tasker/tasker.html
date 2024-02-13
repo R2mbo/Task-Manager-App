@@ -103,9 +103,9 @@
     <main class="sm:container sm:px-4 relative px-2 mx-auto">
       <button
         id="create-task"
-        class="flex items-center justify-center font-semibold text-md sm:w-[165px] py-2 mt-10 sm:px-0 w-full bg-black text-white rounded-md"
+        class="flex items-center justify-center font-semibold text-md sm:w-[165px] py-2 mt-10 mb-10 sm:px-0 w-full bg-black text-white rounded-md"
       >
-        <span class="text-2xl  pr-[5px] pb-[4px]">&plus;</span> Create New Task
+        <span class="text-2xl pr-[5px] pb-[4px]">&plus;</span> Create New Task
       </button>
       <div
         id="create-card"
@@ -118,6 +118,7 @@
           <i class="fa-solid fa-xmark"></i>
         </button>
         <form
+          id="create-task-form"
           class="flex h-full flex-col p-2 items-center justify-center gap-2"
         >
           <h3 class="text-2xl font-semibold mb-5">Create New Task</h3>
@@ -144,6 +145,47 @@
             type="submit"
           >
             Create Task
+          </button>
+        </form>
+      </div>
+      <div
+        id="edit-card"
+        class="hidden bg-white shadow-lg sm:w-[500px] w-full absolute top-[20%] left-[50%] -translate-x-[50%] h-[250px] rounded-2xl"
+      >
+        <button
+          id="close-edit-card"
+          class="font-bold px-3 absolute right-[10px] top-[10px] text-2xl"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <form
+          id="edit-task-form"
+          class="flex h-full flex-col p-2 items-center justify-center gap-2"
+        >
+          <h3 class="text-2xl font-semibold mb-5">Edit Your Task</h3>
+          <select
+            class="p-2 sm:w-[80%] w-full border border-black rounded-lg"
+            name="category"
+            id="category"
+          >
+            <option value="Education">Education</option>
+            <option value="Work">Work</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Travel">Travel</option>
+            <option value="House">House</option>
+            <option value="Others">Others</option>
+          </select>
+          <input
+            class="focus:outline-none border sm:w-[80%] w-full border-black rounded-md px-2 py-1"
+            type="text"
+            id="task-edit"
+            placeholder="Your New Task"
+          />
+          <button
+            class="bg-black font-semibold text-white px-5 py-2 rounded-md sm:w-[80%] w-full"
+            type="submit"
+          >
+            Edit Task
           </button>
         </form>
       </div>
